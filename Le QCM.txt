@@ -1,0 +1,165 @@
+#Les deux premières choses que l'on fait c'est que l'on importe le module QCM et random
+import random
+import qcm
+
+.....................................................................................
+
+On construit une définition qui crée un QCM grace a un fichier texte, ce qui devrait nous donner un fichier texte
+
+def build_questionnaire(filename):
+    """
+        Construit le QCM avec les questions contenue dans le fichier donné.
+        :type filename: Un string représentant le nom du fichier a charger.
+
+        :return: Une liste de questions
+    """ 
+    questions = []
+    wording = None
+    choices = [] bonjour bravo
+.......................................................................................
+    with open(filename, encoding='utf-8') as file: # On ouvre un fichier texte
+
+# Le programme évite une érreur
+        for line in file.readlines():          
+            if '|' not in line:
+                if wording or choices:
+                    questions.append([wording, choices])
+                wording = None
+                choices = []
+
+........................................................................................
+# On sépare les questions et les réponses, Il doit y avoir entre 1 et 5 lignes pour que le code fonctionne
+
+else:                                           
+                parts = line.strip().split('|')
+                if 1 < len(parts) < 5:
+
+
+# On définie la premiere ligne avec un Q comme étant une questions
+
+                    if parts[0] == 'Q':# si la ligne commence par Q          
+                        if not wording and not choices:
+                            wording = parts[1]  # parts = la question = wording
+                            choices = []
+
+
+#
+                        if not wording and not choices:
+                            wording = parts[1]  # parts = la question = wording
+                            choices = []
+
+#
+                    elif parts[0] == 'A': #      si la ligne commence par A
+                        if parts[2] not in ('V', 'X'):# cfr.qcm2 et si la 3e partie de la ligne not in V ou X:
+                            print("Error when loading line:\n\t{}".format(line)) #print error d'ecriture de la ligne
+
+                        else:
+                            choices.append([parts[1], parts[2] == 'V', parts[3] if len(parts) > 3 else '']) # On créer une bonne réponses que l'on associe a la liste Choise
+
+                    else:
+                        print("Error when loading line:Line not starting with A or Q:\n\t{}".format(line)) # si la 1ere partie de la ligne n'est ni Q ni A alors il y a un problème
+                else:
+                    print("Error when loading line:\n\t{}".format(line)) # si les parties de la ligne sont plus que 5 ==> il y a une erreur
+
+                if line.startswith('Q'):
+                    wording = parts[1] # wording = la question j>?
+
+    if wording or choices:
+        questions.append([wording, choices])# questions [0]===question,   [1] === rep
+    #print(questions)
+    return questions
+
+...........................................................................
+# C'est une suite de valeurs que l'on assigne pour les utiliser plus tard
+
+questions = build_questionnaire("QCM.txt") #l
+
+acount=0
+bcount=0
+count=0
+a=42
+b=2640
+hasard=0
+
+brep=False
+................................................................................
+# Dans le projet, on utilise deux systèmes de cotation différents. Le premier utilise seulement le premier barème alors que le second utilise les trois barèmes de cotation ensemble et sa affiche une erreur si on ne met pas a ou b
+
+
+while True:
+    will=input("-Veuillez choisir votre système de côtation:\n\nA ou B\n\n\t1er Barème :\nPour une bonne réponse le système donne 1 pts et pour une mauvaise réponse le système donne 0 pts.\n\t2e Barème :\nPour une bonne réponse le système donne 1 pts et pour une mauvaise réponse le système enlève -1 pts.\n\t3e Barème :\nSi la personne répond aux questions au hasard, sa moyenne finale sera nulle.\n\nA est le premier barème et B est l'ensemble des barèmes : ")
+    try:
+        if will == 'A':
+            will = a # barème 1
+            print('\nVous avez choisi le système de cotation A\n')
+            break
+        elif will == 'B':
+            will = b # tous les barèmess
+            print('\nVous avez choisi le système de cotation B\n')
+            break
+        else:
+            print("Il y a une erreur dans le contenu de votre reponse\n\n")
+    except:
+        ("Il y a une erreur dans le contenu de votre reponse")
+    if will == a:
+        acount = 0
+    else:
+        bcount = 0
+
+...................................................................................
+# On mets les questions dans un ordre aléat
+
+while True:
+    s=random.shuffle(questions)
+    ss=random.shuffle(questions)
+    while True:
+        for q in range(len(questions)):
+            qst = questions[q][0]
+            print(qst, '\n')
+
+.....................................................................................
+# On imprime la questions choisie aléatoirement et les choix de réponses possibles.
+
+            for rep in range(len(questions[q][1])):
+                print(questions[q][1][rep][0])
+
+.....................................................................................
+# On détermine si la réponse est correcte ou pas
+            k = input('Votre reponse: ')
+            brep=False
+            for r in range(len(questions[q][1])):
+                count+=1
+                #if questions[q][1][r][0] != k:
+                #    print("La reponse indiquée ne se trouve pas dans les reponses proposées") 
+
+......................................................................................
+# Le programme agis de telle manière si la réponse est bonne en augmentant les valeur des cotations et en indiquant a l'utilisteur qu'il a bien répondue
+            if brep:
+                print("Bonne reponse, bravo!\n")
+                acount+=1#systeme de cotation a
+                bcount+=1#systeme de cotation b
+
+# Le programme agis de telle manière si la réponse est fausse en diminue les valeur des cotations et en indiquant a l'utilisteur qu'il a mal répondue
+             else:
+                print("mauvaise reponse\n")
+                bcount=bcount-1
+                if k not in questions[q][1][r]:
+                    hasard+=1
+
+.....................................................................................
+# Si on a choisie le système de quotation a
+if will == 42:#système 1
+    print('Le nombre de bonnes reponses est celui de: ', acount, ' sur ', len(questions), ' et votre résultat est celui de ', (acount*100//len(questions)),'%')
+elif hasard>=len(questions):
+
+# Si on choisie le système de quotation b 
+elif will == 2640:#système 2
+    if bcount <=0 :
+        bcount = 0
+    print('Le nombre de bonnes reponses est celui de: ', acount, ' sur ', len(questions), ' et votre résultat est celui de: ',bcount*100//len(questions),'%')
+
+# Message dérreur quand on choisie le mauvais système
+else:
+    print('Choisissez le bon système de cotation!')
+
+
